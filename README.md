@@ -5,67 +5,139 @@ Mendukung login user, akses publik untuk daftar item, dan endpoint terproteksi u
 
 ---
 
-##  Setup Environment & Jalankan Server
+## Setup Environment & Jalankan Server
 
-1. **Install dependencies**
-   ```bash
-   pip install fastapi uvicorn python-dotenv pyjwt
+### 1. Install Dependencies
+```bash
+pip install fastapi uvicorn python-dotenv pyjwt
+```
 
-2. **Membuat .env**
-JWT_SECRET=JWT_SECRET=supersecretkey123
+### 2. Konfigurasi Environment
+Buat file `.env` di root project:
+```env
+JWT_SECRET=supersecretkey123
 port=8000
+```
 
-3. **Menajalankan server**
+### 3. Menjalankan Server
+```bash
 uvicorn main:app --reload
+```
 
-4. **END POINT API**
+Server akan berjalan di `http://127.0.0.1:8000`
+
+---
+
+## 🔗 API Endpoints
+
 | Endpoint      | Method | Proteksi | Deskripsi                           |
-| ------------- | ------ | -------- | ----------------------------------- |
-| `/auth/login` | POST   | ❌        | Login user dan dapatkan token JWT   |
-| `/items`      | GET    | ❌        | Menampilkan daftar item marketplace |
-| `/profile`    | PUT    | ✅        | Update profil user (butuh JWT)      |
+|---------------|--------|----------|-------------------------------------|
+| `/auth/login` | POST   | ❌       | Login user dan dapatkan token JWT   |
+| `/items`      | GET    | ❌       | Menampilkan daftar item marketplace |
+| `/profile`    | PUT    | ✅       | Update profil user (butuh JWT)      |
 
+---
 
-4. **SCHEMA Request dan Response**
-POST /auth/login
-Request
-{ "email": "demo@example.com", "password": "12345" }
-Response (200)
-{ "access_token": "<jwt>" }
-Response (401)
-{ "error": "Invalid credentials" }
+## Schema Request dan Response
 
+### `POST /auth/login`
 
-PUT /profile
-Header
-Authorization: Bearer <JWT>
+**Request Body:**
+```json
+{
+  "email": "demo@example.com",
+  "password": "12345"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "access_token": "<jwt_token>"
+}
+```
+
+**Response (401 Unauthorized):**
+```json
+{
+  "error": "Invalid credentials"
+}
+```
+
+---
+
+### `GET /items`
+
+**Response (200 OK):**
+```json
+[
+  {
+    "id": 1,
+    "name": "Item 1",
+    "price": 10000
+  }
+]
+```
+
+---
+
+### `PUT /profile`
+
+**Headers:**
+```
+Authorization: Bearer <JWT_TOKEN>
 Content-Type: application/json
-Request
-{ "name": "John Doe" }
-Response (200)
+```
+
+**Request Body:**
+```json
+{
+  "name": "John Doe"
+}
+```
+
+**Response (200 OK):**
+```json
 {
   "message": "Profile updated",
-  "profile": { "name": "John Doe", "email": "demo@example.com" }
+  "profile": {
+    "name": "John Doe",
+    "email": "demo@example.com"
+  }
 }
-Response (401)
-{ "error": "Token expired" }
+```
 
+**Response (401 Unauthorized):**
+```json
+{
+  "error": "Token expired"
+}
+```
 
-5. **Login (dapatkan token)**
+---
 
+## Contoh Penggunaan dengan cURL
+
+### Login (dapatkan token)
+```bash
 curl.exe -X POST "http://127.0.0.1:8000/auth/login" ^
   -H "Content-Type: application/json" ^
   --data-raw "{\"email\":\"demo@example.com\",\"password\":\"12345\"}"
+```
 
-
-Lihat item
-
+### Lihat Daftar Item
+```bash
 curl.exe -X GET "http://127.0.0.1:8000/items"
+```
 
-
-Update profil (pakai JWT)
-
+### Update Profil (dengan JWT)
+```bash
 curl.exe -X PUT "http://127.0.0.1:8000/profile" ^
   -H "Authorization: Bearer <ACCESS_TOKEN>" ^
   -H "Content-Type: application/json" ^
   --data-raw "{\"name\":\"John Doe\"}"
+```
+
+> **Note:** Ganti `<ACCESS_TOKEN>` dengan token JWT yang didapat dari endpoint login.
+
+---
