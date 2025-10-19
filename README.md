@@ -125,9 +125,32 @@ curl.exe -X POST "http://127.0.0.1:8000/auth/login" ^
   --data-raw "{\"email\":\"demo@example.com\",\"password\":\"12345\"}"
 ```
 
+**Response:**
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
 ### Lihat Daftar Item
 ```bash
 curl.exe -X GET "http://127.0.0.1:8000/items"
+```
+
+**Response:**
+```json
+[
+  {
+    "id": 1,
+    "name": "Laptop Gaming",
+    "price": 15000000
+  },
+  {
+    "id": 2,
+    "name": "Smartphone",
+    "price": 5000000
+  }
+]
 ```
 
 ### Update Profil (dengan JWT)
@@ -137,6 +160,18 @@ curl.exe -X PUT "http://127.0.0.1:8000/profile" ^
   -H "Content-Type: application/json" ^
   --data-raw "{\"name\":\"John Doe\"}"
 ```
+
+**Response:**
+```json
+{
+  "message": "Profile updated",
+  "profile": {
+    "name": "John Doe",
+    "email": "demo@example.com"
+  }
+}
+```
+
 
 > **Note:** Ganti `<ACCESS_TOKEN>` dengan token JWT yang didapat dari endpoint login.
 
