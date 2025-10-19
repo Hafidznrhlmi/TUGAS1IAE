@@ -28,7 +28,7 @@ Server akan berjalan di `http://127.0.0.1:8000`
 
 ---
 
-## 🔗 API Endpoints
+## API Endpoints
 
 | Endpoint      | Method | Proteksi | Deskripsi                           |
 |---------------|--------|----------|-------------------------------------|
